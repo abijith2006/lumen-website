@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMEN — The Living Light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root{--void:#04060d;--deep:#080c18;--panel:#0d1324;--panel-2:#101830;--line:rgba(120,150,220,0.14);--blue:#3d7bff;--blue-soft:#5b9bff;--blue-deep:#16244a;--gold:#ffd9a0;--gold-bright:#fff2d4;--ember:#ff7a4d;--text:#e8edf7;--muted:#8b96b8;--faint:#5c6788;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--void);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;position:relative;}
+::selection{background:var(--blue);color:#fff;}
+#field{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.wrap{max-width:1080px;margin:0 auto;padding:0 32px;position:relative;z-index:2;}
+a{color:inherit;}
+
+/* INTRO */
+html.intro-lock,html.intro-lock body{overflow:hidden;height:100%;}
+#introOverlay{position:fixed;inset:0;z-index:9999;background:radial-gradient(ellipse 60% 45% at 50% 46%,rgba(255,224,170,0.05),transparent 60%),radial-gradient(ellipse at 50% 55%,#070b16 0%,#030509 60%,#000 100%);display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .9s cubic-bezier(.4,0,.2,1);}
+#introOverlay.fade-out{opacity:0;pointer-events:none;}
+#introCanvas{position:absolute;inset:0;}
+#introOverlay::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;background:radial-gradient(ellipse at 50% 50%,transparent 40%,rgba(0,0,0,0.55) 100%);}
+#introSeed{position:absolute;top:50%;left:50%;z-index:3;width:4px;height:4px;border-radius:50%;transform:translate(-50%,-50%) scale(0);background:var(--gold-bright);box-shadow:0 0 8px 2px rgba(255,242,212,0.9);opacity:0;}
+#introSeed.bloom{animation:seedbloom 1.8s cubic-bezier(.2,.8,.2,1) forwards;}
+@keyframes seedbloom{0%{opacity:0;transform:translate(-50%,-50%) scale(0);}35%{opacity:1;transform:translate(-50%,-50%) scale(1);}100%{opacity:0;transform:translate(-50%,-50%) scale(1);}}
+#introLine{position:absolute;top:50%;left:50%;z-index:3;height:1px;width:0;transform:translate(-50%,-50%);background:linear-gradient(90deg,transparent,rgba(255,242,212,0.9) 20%,#fff 50%,rgba(255,242,212,0.9) 80%,transparent);box-shadow:0 0 14px 1px rgba(255,224,170,0.7);opacity:0;}
+#introLine.draw{opacity:1;animation:linedraw 1.4s cubic-bezier(.32,.9,.18,1) forwards;}
+@keyframes linedraw{0%{width:0;}70%{width:min(640px,82vw);}100%{width:min(640px,82vw);opacity:.9;}}
+#introLine.retract{animation:lineretract .8s cubic-bezier(.5,0,.3,1) forwards;}
+@keyframes lineretract{to{opacity:0;width:0;}}
+#introRing{position:absolute;top:50%;left:50%;z-index:2;width:10px;height:10px;border-radius:50%;transform:translate(-50%,-50%) scale(1);border:1px solid rgba(255,224,170,0.55);opacity:0;}
+#introRing.expand{animation:ringexpand 2.2s cubic-bezier(.15,.7,.2,1) forwards;}
+@keyframes ringexpand{0%{opacity:.8;transform:translate(-50%,-50%) scale(1);}100%{opacity:0;transform:translate(-50%,-50%) scale(60);}}
+#introContent{position:relative;z-index:4;text-align:center;padding:0 24px;transition:opacity .8s ease,filter .8s ease;}
+#introContent.dissolve{opacity:0;filter:blur(6px);}
+.intro-luxe{background:linear-gradient(100deg,#c9974f 0%,#fffaf0 12%,var(--gold-bright) 24%,var(--gold) 38%,#d9b479 50%,var(--gold) 62%,var(--gold-bright) 76%,#fffaf0 88%,#c9974f 100%);background-size:340% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 50px rgba(255,217,160,0.22);}
+#introWorld{font-family:'Fraunces',serif;font-weight:700;font-size:clamp(15px,3.2vw,28px);text-transform:uppercase;color:#b9f3ff;letter-spacing:.92em;opacity:0;position:relative;text-shadow:0 0 5px rgba(100,220,255,.8),0 0 15px rgba(50,190,255,.6),0 0 35px rgba(30,150,255,.45);transform:translateY(20px) scale(.96);filter:blur(10px);transition:opacity 1.5s cubic-bezier(.16,.9,.15,1),letter-spacing 1.9s cubic-bezier(.16,.9,.15,1),transform 1.7s cubic-bezier(.16,.9,.15,1),filter 1.6s cubic-bezier(.16,.9,.15,1);}
+#introWorld.show{opacity:.92;letter-spacing:.42em;transform:translateY(0) scale(1);filter:blur(0);animation:worldGlow 3.2s ease-in-out 1.9s infinite alternate;}
+@keyframes worldGlow{0%{text-shadow:0 0 5px rgba(100,220,255,.7),0 0 15px rgba(50,190,255,.5),0 0 30px rgba(30,150,255,.35);}100%{text-shadow:0 0 8px rgba(180,245,255,1),0 0 25px rgba(50,210,255,.9),0 0 55px rgba(30,150,255,.7),0 0 90px rgba(0,120,255,.35);}}
+#introLumen{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(52px,12vw,132px);line-height:1;margin-top:22px;letter-spacing:.6em;opacity:0;transform:translateY(14px) scale(.97);filter:blur(14px);transition:opacity 1.8s cubic-bezier(.13,.85,.1,1),letter-spacing 2.3s cubic-bezier(.13,.85,.1,1),transform 1.9s cubic-bezier(.13,.85,.1,1),filter 1.8s cubic-bezier(.13,.85,.1,1),background-position 2.6s ease-out .3s;}
+#introLumen.show{opacity:1;letter-spacing:.015em;transform:translateY(0) scale(1);filter:blur(0);font-weight:500;background-position:0% 0;}
+#introLumen.show.shimmer{animation:lumenShimmer 3.4s ease-in-out 2.4s infinite;}
+@keyframes lumenShimmer{0%,100%{background-position:0% 0;}50%{background-position:-120% 0;}}
+#introLiving{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:clamp(16px,2.4vw,22px);color:#e9e2cf;letter-spacing:.32em;opacity:0;transform:translateY(10px);filter:blur(4px);transition:opacity 1.3s cubic-bezier(.22,.8,.2,1),transform 1.3s cubic-bezier(.22,.8,.2,1),letter-spacing 1.5s cubic-bezier(.22,.8,.2,1),filter 1.3s cubic-bezier(.22,.8,.2,1);}
+#introLiving.show{opacity:1;transform:translateY(0);letter-spacing:.06em;filter:blur(0);}
+.intro-divider{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:26px;opacity:0;transition:opacity 1s ease;}
+.intro-divider.show{opacity:1;}
+.intro-divider .dl{width:52px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,224,170,.5));}
+.intro-divider .dr{width:52px;height:1px;background:linear-gradient(90deg,rgba(255,224,170,.5),transparent);}
+.intro-divider .dm{width:4px;height:4px;border-radius:50%;background:var(--gold-bright);box-shadow:0 0 10px 3px rgba(255,224,170,.85);}
+#introQuote{position:absolute;left:0;right:0;text-align:center;z-index:4;padding:0 24px;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:clamp(22px,3.6vw,38px);line-height:1.42;color:#f1ecdd;opacity:0;transform:translateY(4px);transition:opacity 1.2s ease,transform 1.2s ease;}
+#introQuote.show{opacity:1;transform:translateY(0);}
+#introSkip{position:absolute;bottom:26px;right:26px;z-index:5;background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:20px;padding:8px 16px;font-size:11px;font-family:'JetBrains Mono',monospace;letter-spacing:.08em;cursor:pointer;opacity:0;transition:opacity .5s ease,border-color .25s,color .25s;}
+#introSkip.show{opacity:1;}
+#introSkip:hover{border-color:var(--gold);color:var(--gold);}
+
+/* HERO */
+.lumen-hero{min-height:100vh;position:relative;overflow:hidden;background:radial-gradient(circle at 75% 45%,rgba(61,123,255,.18),transparent 35%),radial-gradient(circle at 25% 70%,rgba(0,220,255,.08),transparent 35%),#04060d;color:#e8edf7;}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(90,140,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(90,140,255,.055) 1px,transparent 1px);background-size:50px 50px;mask-image:linear-gradient(to bottom,black,transparent);pointer-events:none;}
+.hero-vignette{position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,6,13,.96) 0%,rgba(4,6,13,.70) 38%,rgba(4,6,13,.12) 75%,rgba(4,6,13,.55) 100%);pointer-events:none;}
+.lumen-nav{position:absolute;top:0;left:0;right:0;height:100px;padding:0 6vw;display:flex;align-items:center;justify-content:space-between;z-index:20;}
+.lumen-logo{display:flex;align-items:center;gap:12px;font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;letter-spacing:.25em;color:#f2f5ff;}
+.logo-symbol{width:35px;height:35px;display:grid;place-items:center;color:#ffd9a0;font-size:24px;border:1px solid rgba(255,217,160,.5);border-radius:50%;box-shadow:0 0 20px rgba(255,217,160,.25);}
+.lumen-nav nav{display:flex;gap:42px;}
+.lumen-nav nav a{color:#8b96b8;text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.28em;transition:.3s;}
+.lumen-nav nav a:hover{color:#5b9bff;text-shadow:0 0 15px rgba(91,155,255,.7);}
+.lumen-hero-content{min-height:100vh;max-width:1450px;margin:auto;padding:140px 6vw 100px;display:grid;grid-template-columns:.9fr 1.1fr;align-items:center;position:relative;z-index:5;}
+.lumen-hero-text{position:relative;z-index:10;max-width:680px;}
+.hero-status{width:fit-content;display:flex;align-items:center;gap:12px;padding:9px 18px;border:1px solid rgba(0,220,255,.35);border-radius:30px;color:#00dfff;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;margin-bottom:40px;background:rgba(0,220,255,.025);box-shadow:0 0 25px rgba(0,220,255,.06);}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#00eaff;box-shadow:0 0 12px #00eaff;animation:statusPulse 1.8s infinite;}
+@keyframes statusPulse{0%,100%{opacity:.5;transform:scale(.8);}50%{opacity:1;transform:scale(1.2);}}
+.hero-small-title{font-family:'JetBrains Mono',monospace;font-size:14px;letter-spacing:.45em;color:#8b96b8;margin-bottom:4px;}
+.lumen-hero h1{margin:0;font-family:'Space Grotesk',sans-serif;font-size:clamp(90px,12vw,180px);line-height:.85;letter-spacing:-.06em;font-weight:800;color:#eef3ff;text-shadow:0 0 50px rgba(255,255,255,.08);animation:lumenTitle 1.2s ease-out;}
+@keyframes lumenTitle{from{opacity:0;transform:translateX(-40px);filter:blur(12px);}to{opacity:1;transform:translateX(0);filter:blur(0);}}
+.hero-subtitle{margin-top:18px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(24px,3vw,42px);letter-spacing:.12em;color:#00dfff;text-shadow:0 0 25px rgba(0,220,255,.35);}
+.hero-line{width:280px;height:1px;margin:28px 0;background:linear-gradient(90deg,#ffd9a0,rgba(255,217,160,.1),transparent);}
+.hero-line span{display:block;width:7px;height:7px;transform:translateY(-3px);border-radius:50%;background:#ffd9a0;box-shadow:0 0 15px #ffd9a0;}
+.lumen-hero-text p{max-width:600px;margin:0;color:#8b96b8;font-family:'Cormorant Garamond',serif;font-size:20px;line-height:1.65;font-weight:500;}
+.hero-buttons{display:flex;gap:16px;margin-top:38px;flex-wrap:wrap;}
+.hero-btn{min-height:58px;padding:0 30px;display:flex;align-items:center;justify-content:center;gap:22px;border-radius:40px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;letter-spacing:.05em;text-decoration:none;cursor:pointer;transition:transform .3s,box-shadow .3s,border-color .3s;}
+.hero-btn.primary{border:none;background:linear-gradient(135deg,#00eaff,#00b9dd);color:#031016;box-shadow:0 0 30px rgba(0,220,255,.18);}
+.hero-btn.primary:hover{transform:translateY(-4px);box-shadow:0 12px 35px rgba(0,220,255,.3);}
+.hero-btn.secondary{border:1px solid rgba(91,155,255,.35);color:#dce5ff;background:rgba(10,20,40,.35);backdrop-filter:blur(8px);}
+.hero-btn.secondary:hover{transform:translateY(-4px);border-color:#5b9bff;color:#5b9bff;}
+.lumen-hero-visual{position:relative;height:min(760px,80vh);display:flex;align-items:center;justify-content:center;}
+.hero-orb-glow{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(61,123,255,.28),rgba(0,220,255,.08) 35%,transparent 70%);filter:blur(15px);animation:orbGlow 5s ease-in-out infinite;}
+@keyframes orbGlow{0%,100%{transform:scale(.92);opacity:.65;}50%{transform:scale(1.08);opacity:1;}}
+.hero-light-circle{position:absolute;width:560px;height:560px;border-radius:50%;border:1px solid rgba(91,155,255,.3);box-shadow:0 0 40px rgba(61,123,255,.15),inset 0 0 40px rgba(61,123,255,.08);animation:circleRotate 20s linear infinite;}
+.hero-light-circle::before{content:'';position:absolute;inset:35px;border-radius:50%;border:1px solid rgba(255,217,160,.25);}
+.hero-light-circle::after{content:'';position:absolute;inset:100px;border-radius:50%;border:1px dashed rgba(0,220,255,.2);}
+@keyframes circleRotate{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.lumen-character{position:relative;width:min(620px,47vw);z-index:5;animation:characterFloat 6s ease-in-out infinite;}
+.lumen-character img{width:100%;height:auto;display:block;object-fit:contain;filter:drop-shadow(0 0 25px rgba(61,123,255,.35)) drop-shadow(0 25px 45px rgba(0,0,0,.6));}
+@keyframes characterFloat{0%,100%{transform:translateY(8px);}50%{transform:translateY(-14px);}}
+.energy-ring{position:absolute;border-radius:50%;border:2px solid rgba(128,100,255,.35);pointer-events:none;z-index:1;}
+.ring-1{width:400px;height:120px;right:-60px;top:100px;transform:rotate(-8deg);box-shadow:0 0 20px rgba(128,80,255,.3);animation:ringFloat 6s ease-in-out infinite;}
+.ring-2{width:280px;height:90px;right:170px;top:210px;transform:rotate(-10deg);border-color:rgba(0,220,255,.28);animation:ringFloat 7s ease-in-out infinite reverse;}
+.ring-3{width:190px;height:60px;right:30px;bottom:180px;transform:rotate(-15deg);border-color:rgba(255,217,160,.2);animation:ringFloat 5s ease-in-out infinite;}
+@keyframes ringFloat{0%,100%{transform:translateY(0) rotate(-8deg);}50%{transform:translateY(-18px) rotate(-4deg);}}
+.particle{position:absolute;width:4px;height:4px;border-radius:50%;background:#00eaff;box-shadow:0 0 12px #00eaff;animation:particleFloat 4s ease-in-out infinite;}
+.p1{top:20%;right:18%;} .p2{top:38%;right:5%;animation-delay:1s;} .p3{top:65%;right:15%;animation-delay:2s;} .p4{top:25%;left:20%;animation-delay:1.5s;} .p5{bottom:25%;left:40%;animation-delay:.5s;}
+@keyframes particleFloat{0%,100%{opacity:.2;transform:translateY(0);}50%{opacity:1;transform:translateY(-20px);}}
+.hero-bottom{position:absolute;left:6vw;right:6vw;bottom:32px;z-index:15;display:flex;align-items:center;gap:18px;}
+.hero-info{height:43px;padding:0 18px;display:flex;align-items:center;gap:10px;border:1px solid rgba(91,155,255,.25);border-radius:8px;background:rgba(5,12,28,.55);backdrop-filter:blur(8px);color:#8b96b8;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;}
+.hero-info strong{color:#00eaff;font-weight:500;}
+.info-dot{width:6px;height:6px;border-radius:50%;background:#00eaff;box-shadow:0 0 10px #00eaff;}
+.resonance{gap:14px;}
+.resonance-bar{width:120px;height:5px;overflow:hidden;border-radius:10px;background:rgba(91,155,255,.15);}
+.resonance-bar span{display:block;width:98%;height:100%;border-radius:10px;background:linear-gradient(90deg,#00dfff,#6c7cff);box-shadow:0 0 10px rgba(0,220,255,.5);animation:resonanceLoad 2s ease-out;}
+@keyframes resonanceLoad{from{width:0;}to{width:98%;}}
+.hero-scroll{margin-left:auto;display:flex;align-items:center;gap:12px;color:#5c6788;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.25em;}
+.hero-scroll span{font-size:18px;color:#8b96b8;animation:scrollBounce 1.8s infinite;}
+@keyframes scrollBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+
+/* SECTIONS GENERAL */
+section{position:relative;z-index:2;padding:120px 0;}
+.section-head{margin-bottom:56px;}
+.section-eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--blue-soft);letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px;}
+h2{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(28px,4vw,44px);letter-spacing:-.01em;}
+h2 .accent{color:var(--gold);}
+.lead{color:var(--muted);max-width:560px;font-size:16px;line-height:1.7;margin-top:14px;}
+
+/* PROFILE */
+.profile-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:center;}
+.profile-card{background:linear-gradient(160deg,var(--panel),var(--panel-2));border:1px solid var(--line);border-radius:18px;padding:36px;position:relative;overflow:hidden;}
+.profile-card::after{content:'';position:absolute;top:-40%;right:-30%;width:60%;height:120%;background:radial-gradient(circle,rgba(61,123,255,.15),transparent 70%);}
+.pf-row{display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line);font-size:14px;position:relative;z-index:1;}
+.pf-row:last-child{border-bottom:none;}
+.pf-label{color:var(--faint);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding-top:2px;}
+.pf-value{text-align:right;color:var(--text);font-weight:500;max-width:60%;}
+.mission-box{margin-top:20px;padding:20px;border-left:2px solid var(--gold);background:rgba(255,217,160,.05);border-radius:0 10px 10px 0;font-style:italic;color:var(--gold-bright);font-size:15px;position:relative;z-index:1;}
+.trait-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px;}
+.pill{font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--blue-soft);border:1px solid rgba(93,150,255,.3);padding:5px 12px;border-radius:999px;}
+
+/* TIMELINE */
+.timeline{position:relative;padding-left:44px;}
+.timeline::before{content:'';position:absolute;left:11px;top:6px;bottom:6px;width:1px;background:linear-gradient(var(--blue),transparent 95%);}
+.tl-item{position:relative;padding-bottom:56px;transition:opacity .6s ease,transform .6s ease;}
+.tl-item:last-child{padding-bottom:0;}
+#origin.story-mode{background:radial-gradient(ellipse 70% 50% at 50% 20%,rgba(61,123,255,.06),transparent 70%);}
+#origin.story-mode .section-head{text-align:center;}
+#origin.story-mode .section-head .lead,#origin.story-mode .section-eyebrow{margin-left:auto;margin-right:auto;}
+#origin.story-mode .timeline{max-width:640px;margin:0 auto;}
+#origin.story-mode .tl-item{opacity:.32;transform:translateX(6px);}
+#origin.story-mode .tl-item.active{opacity:1;transform:translateX(0);}
+#origin.story-mode .tl-item.active .tl-h{color:var(--gold-bright);}
+.story-badge{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--gold);border:1px solid rgba(255,217,160,.3);background:rgba(255,217,160,.06);padding:7px 16px;border-radius:999px;margin-bottom:18px;opacity:0;transform:translateY(-6px);transition:opacity .5s ease,transform .5s ease;}
+.story-badge.show{opacity:1;transform:translateY(0);}
+.story-badge .dot{width:5px;height:5px;border-radius:50%;background:var(--gold);box-shadow:0 0 6px 2px var(--gold);animation:corepulse 1.8s ease-in-out infinite;}
+@keyframes corepulse{0%,100%{opacity:.7;transform:scale(.9);}50%{opacity:1;transform:scale(1.15);}}
+.tl-dot{position:absolute;left:-44px;top:2px;width:23px;height:23px;border-radius:50%;background:var(--deep);border:1px solid var(--blue-soft);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--blue-soft);}
+.tl-item.warn .tl-dot{border-color:var(--ember);color:var(--ember);}
+.tl-tag{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--blue-soft);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;}
+.tl-h{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:600;margin-bottom:10px;}
+.tl-p{color:var(--muted);font-size:15px;line-height:1.7;max-width:600px;}
+.tl-quote{margin-top:14px;font-style:italic;color:var(--gold-bright);font-size:14px;border-left:2px solid var(--gold);padding-left:14px;}
+.tl-steps{margin-top:14px;display:flex;flex-direction:column;gap:8px;}
+.tl-step{display:flex;gap:10px;font-size:14px;color:var(--muted);align-items:flex-start;}
+.tl-step b{color:var(--blue-soft);font-family:'JetBrains Mono',monospace;font-size:12px;min-width:16px;}
+
+/* POWERS */
+.powers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden;}
+.power-card{background:var(--panel);padding:32px 26px;transition:background .3s;cursor:default;}
+.power-card:hover{background:var(--panel-2);}
+.power-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(61,123,255,.12);border:1px solid rgba(93,150,255,.25);margin-bottom:16px;font-size:18px;color:var(--gold);}
+.power-name{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;margin-bottom:8px;}
+.power-desc{color:var(--muted);font-size:13.5px;line-height:1.6;}
+
+/* ULTIMATE */
+.ultimate{background:radial-gradient(circle at 30% 20%,rgba(255,217,160,.08),transparent 60%),var(--panel);border:1px solid var(--line);border-radius:20px;padding:48px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;}
+.prism{width:100%;aspect-ratio:1;position:relative;}
+.ultimate-list{list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:18px;}
+.ultimate-list li{font-size:14.5px;color:var(--muted);padding-left:22px;position:relative;}
+.ultimate-list li::before{content:'◆';position:absolute;left:0;color:var(--gold);font-size:9px;top:5px;}
+.cost-note{margin-top:22px;padding:14px 16px;border:1px solid rgba(255,122,77,.3);background:rgba(255,122,77,.06);border-radius:10px;font-size:13.5px;color:#ffb595;}
+
+/* WEAKNESS */
+.weakness{border:1px solid rgba(255,122,77,.35);border-radius:18px;padding:40px;background:linear-gradient(160deg,rgba(255,122,77,.06),transparent);position:relative;overflow:hidden;}
+.weakness::before{content:'CORE MELTDOWN';position:absolute;top:16px;right:20px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--ember);opacity:.6;animation:blinker 1.6s step-start infinite;}
+@keyframes blinker{50%{opacity:.15;}}
+.heat-bar{height:6px;border-radius:4px;background:rgba(255,255,255,.06);margin:24px 0;overflow:hidden;}
+.heat-fill{height:100%;width:30%;border-radius:4px;background:linear-gradient(90deg,#ffb595,var(--ember));animation:heatup 6s ease-in-out infinite;}
+@keyframes heatup{0%,100%{width:22%;}50%{width:88%;}}
+.weak-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;}
+.weak-list span{font-size:12.5px;font-family:'JetBrains Mono',monospace;color:#ffb595;border:1px solid rgba(255,122,77,.3);padding:6px 12px;border-radius:999px;}
+
+/* HQ */
+.hq-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+.hq-list{list-style:none;display:flex;flex-direction:column;gap:14px;}
+.hq-list li{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;color:var(--muted);}
+.hq-list li::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--blue-soft);margin-top:6px;flex-shrink:0;box-shadow:0 0 6px var(--blue-soft);}
+.map-panel{border:1px solid var(--line);border-radius:16px;padding:26px;background:var(--panel);min-height:240px;position:relative;overflow:hidden;}
+.radar{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.radar-ring{position:absolute;border:1px solid rgba(93,150,255,.18);border-radius:50%;}
+.radar-sweep{position:absolute;width:50%;height:1px;top:50%;left:50%;background:linear-gradient(90deg,var(--blue-soft),transparent);transform-origin:left center;animation:sweep 4s linear infinite;}
+@keyframes sweep{to{transform:rotate(360deg);}}
+
+/* PHILOSOPHY / MISSION */
+.philosophy{text-align:center;padding:100px 0;}
+.big-quote{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(26px,4.5vw,46px);line-height:1.3;max-width:760px;margin:0 auto;color:var(--gold-bright);}
+.attribution{margin-top:22px;color:var(--faint);font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;}
+.mission-body{max-width:680px;margin:34px auto 0;text-align:left;color:var(--muted);font-size:15.5px;line-height:1.75;}
+.mission-body b{color:var(--text);font-weight:600;}
+.mission-quote{max-width:680px;margin:26px auto 0;text-align:left;border-left:2px solid var(--gold);padding-left:16px;font-style:italic;color:var(--gold-bright);font-size:15px;}
+
+/* MYSTERY */
+.mystery{border:1px solid var(--line);border-radius:20px;padding:50px;background:linear-gradient(180deg,var(--panel),var(--void));text-align:center;}
+.mystery p{color:var(--muted);max-width:520px;margin:14px auto 0;line-height:1.7;font-size:15px;}
+.mystery .flicker{color:var(--gold);font-family:'Space Grotesk',sans-serif;font-weight:600;animation:flicker 3s infinite;}
+@keyframes flicker{0%,19%,21%,23%,54%,56%,100%{opacity:1;}20%,22%,55%{opacity:.35;}}
+.mission-list{list-style:none;max-width:520px;margin:22px auto 0;display:flex;flex-direction:column;gap:12px;text-align:left;}
+.mission-list li{display:flex;gap:12px;align-items:flex-start;color:var(--muted);font-size:14.5px;line-height:1.6;}
+.mission-list .num{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:rgba(255,217,160,.08);border:1px solid rgba(255,217,160,.3);color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:12px;display:flex;align-items:center;justify-content:center;}
+.mission-list b{color:var(--text);}
+
+/* FOOTER */
+footer{padding:60px 0 40px;text-align:center;color:var(--faint);font-size:12.5px;border-top:1px solid var(--line);}
+
+/* CHAT */
+#orb{position:fixed;bottom:28px;right:28px;z-index:100;width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--gold-bright),var(--gold) 55%,#7a5a1f 100%);border:none;cursor:pointer;box-shadow:0 0 30px 6px rgba(255,217,160,.35),0 8px 24px rgba(0,0,0,.4);animation:orbfloat 3.4s ease-in-out infinite;}
+@keyframes orbfloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+#orb::after{content:'';position:absolute;inset:-8px;border-radius:50%;border:1px solid rgba(255,217,160,.35);animation:ping 2.2s ease-out infinite;}
+@keyframes ping{0%{transform:scale(.9);opacity:.7;}100%{transform:scale(1.6);opacity:0;}}
+#orbBadge{position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:var(--blue);border:2px solid var(--void);font-size:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'JetBrains Mono',monospace;}
+#chatPanel{position:fixed;bottom:24px;right:24px;z-index:101;width:380px;max-width:92vw;height:600px;max-height:82vh;background:linear-gradient(180deg,#0a0f1f,#060911);border:1px solid var(--line);border-radius:20px;box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 40px rgba(61,123,255,.08);display:flex;flex-direction:column;overflow:hidden;transform:translateY(24px) scale(.96);opacity:0;pointer-events:none;transition:transform .35s cubic-bezier(.2,.9,.25,1),opacity .3s;}
+#chatPanel.open{transform:translateY(0) scale(1);opacity:1;pointer-events:all;}
+.chat-head{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line);background:rgba(61,123,255,.04);}
+.chat-avatar{width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--gold-bright),var(--gold));flex-shrink:0;box-shadow:0 0 12px rgba(255,217,160,.5);}
+.chat-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14.5px;}
+.chat-status{font-size:11px;color:var(--blue-soft);display:flex;align-items:center;gap:6px;}
+.chat-status .dot{width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px #4ade80;}
+.chat-close{margin-left:auto;background:none;border:none;color:var(--faint);cursor:pointer;font-size:18px;line-height:1;padding:4px;}
+.chat-close:hover{color:var(--text);}
+#chatBody{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;}
+#chatBody::-webkit-scrollbar{width:5px;}
+#chatBody::-webkit-scrollbar-thumb{background:var(--blue-deep);border-radius:4px;}
+.msg{max-width:82%;padding:11px 14px;border-radius:14px;font-size:13.8px;line-height:1.5;animation:msgIn .3s ease;}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.msg.bot{align-self:flex-start;background:var(--panel-2);border:1px solid var(--line);border-bottom-left-radius:4px;}
+.msg.user{align-self:flex-end;background:linear-gradient(135deg,var(--blue),#2a5cd6);color:#fff;border-bottom-right-radius:4px;}
+.msg.system{align-self:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);border:1px dashed rgba(255,217,160,.3);background:rgba(255,217,160,.05);padding:8px 12px;text-align:center;max-width:100%;}
+.typing{display:flex;gap:4px;padding:12px 14px;align-self:flex-start;background:var(--panel-2);border-radius:14px;border-bottom-left-radius:4px;border:1px solid var(--line);}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--blue-soft);animation:tdot 1.2s infinite ease-in-out;}
+.typing span:nth-child(2){animation-delay:.15s;}
+.typing span:nth-child(3){animation-delay:.3s;}
+@keyframes tdot{0%,60%,100%{transform:translateY(0);opacity:.4;}30%{transform:translateY(-4px);opacity:1;}}
+#chatOptions{display:flex;flex-wrap:wrap;gap:8px;padding:0 18px 10px;}
+.opt-btn{font-size:12.5px;border:1px solid var(--blue-deep);color:var(--blue-soft);background:rgba(61,123,255,.06);padding:8px 13px;border-radius:999px;cursor:pointer;transition:all .2s;}
+.opt-btn:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
+.chat-input-row{display:flex;gap:8px;padding:14px;border-top:1px solid var(--line);}
+#chatInput{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:11px 14px;color:var(--text);font-family:'Inter',sans-serif;font-size:13.8px;outline:none;}
+#chatInput:focus{border-color:var(--blue-soft);}
+#chatSend{background:linear-gradient(135deg,var(--gold-bright),var(--gold));border:none;border-radius:12px;width:42px;color:#221507;cursor:pointer;font-size:15px;flex-shrink:0;}
+#chatSend:hover{opacity:.9;}
+
+/* MOBILE */
+@media(max-width:900px){
+.lumen-nav{height:80px;}
+.lumen-nav nav{display:none;}
+.lumen-hero-content{grid-template-columns:1fr;text-align:center;padding:120px 25px 120px;}
+.lumen-hero-text{margin:auto;}
+.hero-status{margin-left:auto;margin-right:auto;}
+.hero-line{margin-left:auto;margin-right:auto;}
+.lumen-hero-text p{margin-left:auto;margin-right:auto;}
+.hero-buttons{justify-content:center;}
+.lumen-hero-visual{height:500px;margin-top:-30px;}
+.lumen-character{width:min(520px,85vw);}
+.hero-light-circle{width:430px;height:430px;}
+.hero-bottom{bottom:20px;justify-content:center;}
+.hero-scroll{display:none;}
+.profile-grid{grid-template-columns:1fr;}
+.ultimate{grid-template-columns:1fr;}
+.hq-grid{grid-template-columns:1fr;}
+.powers-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:600px){
+.lumen-logo{font-size:18px;}
+.logo-symbol{width:29px;height:29px;}
+.hero-small-title{font-size:10px;}
+.lumen-hero h1{font-size:72px;}
+.hero-subtitle{font-size:25px;}
+.lumen-hero-text p{font-size:17px;}
+.hero-btn{width:100%;}
+.lumen-hero-visual{height:380px;}
+.hero-light-circle{width:320px;height:320px;}
+.hero-bottom{display:none;}
+.powers-grid{grid-template-columns:1fr;}
+.ultimate{padding:28px;}
+.weakness{padding:28px;}
+.mystery{padding:30px 22px;}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="introOverlay">
+  <canvas id="introCanvas"></canvas>
+  <div id="introRing"></div>
+  <div id="introLine"></div>
+  <div id="introSeed"></div>
+  <div id="introContent">
+    <div id="introWorld">THE WORLD OF</div>
+    <div id="introLumen" class="intro-luxe">LUMEN</div>
+    <div id="introLiving">the living light</div>
+    <div class="intro-divider" id="introDivider"><span class="dl"></span><span class="dm"></span><span class="dr"></span></div>
+  </div>
+  <div id="introQuote">
+    &ldquo;No one should be left<br>in the dark.&rdquo;
+    <div class="intro-divider show" style="margin-top:22px;"><span class="dl"></span><span class="dm"></span><span class="dr"></span></div>
+  </div>
+  <button id="introSkip">SKIP INTRO</button>
+</div>
+
+<canvas id="field"></canvas>
+
+<!-- HERO -->
+<section class="lumen-hero" id="home">
+  <div class="hero-grid"></div>
+  <div class="hero-vignette"></div>
+  <div class="energy-ring ring-1"></div>
+  <div class="energy-ring ring-2"></div>
+  <div class="energy-ring ring-3"></div>
+
+  <header class="lumen-nav">
+    <div class="lumen-logo"><span class="logo-symbol">✦</span><span>LUMEN</span></div>
+    <nav>
+      <a href="#home">HOME</a>
+      <a href="#origin">ORIGIN</a>
+      <a href="#powers">POWERS</a>
+      <a href="#mission">MISSION</a>
+      <a href="#mystery">MYSTERY</a>
+    </nav>
+  </header>
+
+  <div class="lumen-hero-content">
+    <div class="lumen-hero-text">
+      <div class="hero-status"><span class="status-dot"></span>ASTRA-7 // SIGNAL ONLINE</div>
+      <div class="hero-small-title">THE WORLD OF</div>
+      <h1>LUMEN</h1>
+      <div class="hero-subtitle">THE LIVING LIGHT</div>
+      <div class="hero-line"><span></span></div>
+      <p>Once an engineer chasing the science of light — now the light itself. Lumen finds the people the dark has forgotten, and makes sure they're never left there alone.</p>
+      <div class="hero-buttons">
+        <button class="hero-btn primary" onclick="openChat()">TALK TO LUMEN <span>→</span></button>
+        <a href="#origin" class="hero-btn secondary" id="storyModeBtn">ENTER STORY MODE <span>⌄</span></a>
+      </div>
+    </div>
+
+    <div class="lumen-hero-visual">
+      <div class="hero-orb-glow"></div>
+      <div class="hero-light-circle"></div>
+      <div class="lumen-character"><img src="lumen-hero1.png" alt="Lumen - The Living Light"></div>
+      <span class="particle p1"></span>
+      <span class="particle p2"></span>
+      <span class="particle p3"></span>
+      <span class="particle p4"></span>
+      <span class="particle p5"></span>
+    </div>
+  </div>
+
+  <div class="hero-bottom">
+    <div class="hero-info"><span class="info-dot"></span>LUMINOUS CORE <strong>ACTIVE</strong></div>
+    <div class="hero-info resonance"><span>PHOTON RESONANCE</span> <strong>98%</strong><div class="resonance-bar"><span></span></div></div>
+    <div class="hero-scroll">SCROLL <span>↓</span></div>
+  </div>
+</section>
+
+<!-- PROFILE -->
+<section id="profile">
+  <div class="wrap">
+    <div class="profile-grid">
+      <div>
+        <div class="section-eyebrow">Character File</div>
+        <h2>Who is <span class="accent">Lumen</span></h2>
+        <p class="lead">Calm. Intelligent. Compassionate. A hero who listens before he acts — because most people who reach out have already run out of people who will.</p>
+        <div class="trait-pills">
+          <span class="pill">Calm</span>
+          <span class="pill">Intelligent</span>
+          <span class="pill">Compassionate</span>
+          <span class="pill">Listener</span>
+        </div>
+      </div>
+      <div class="profile-card">
+        <div class="pf-row"><span class="pf-label">Real Name</span><span class="pf-value">Aarav Menon</span></div>
+        <div class="pf-row"><span class="pf-label">Age</span><span class="pf-value">24</span></div>
+        <div class="pf-row"><span class="pf-label">Occupation</span><span class="pf-value">Photonics & Energy Systems Research Engineer</span></div>
+        <div class="pf-row"><span class="pf-label">Headquarters</span><span class="pf-value">Astra-7, beneath the Western Ghats</span></div>
+        <div class="mission-box">"No one should be left in the dark."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORIGIN -->
+<section id="origin">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="story-badge" id="storyBadge"><span class="dot"></span>STORY MODE ENGAGED</div>
+      <div class="section-eyebrow">How he became Lumen</div>
+      <h2>Four moments, <span class="accent">one light</span></h2>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot">01</div>
+        <div class="tl-tag">Origin</div>
+        <div class="tl-h">The Boy Who Chased Light</div>
+        <p class="tl-p">From childhood, Aarav Menon was fascinated by light. Where others saw only illumination, he saw energy, information, and the future of technology. Raised by an electrical engineer and a physics teacher, he dedicated himself to photonics and energy systems — chasing clean, powerful, controllable energy for humanity. That pursuit led him to a classified research program.</p>
+        <div class="tl-quote">"Light is more than what your eyes can see." — Aarav's father</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">02</div>
+        <div class="tl-tag">Project Helios</div>
+        <div class="tl-h">An Artificial Star</div>
+        <p class="tl-p">At 24, Aarav joined a classified program with an extraordinary objective: build an artificial star-like energy core capable of generating and controlling enormous photonic and electromagnetic energy. There was one unsolved problem: the human body was never designed to survive that amount of energy.</p>
+      </div>
+      <div class="tl-item warn">
+        <div class="tl-dot">03</div>
+        <div class="tl-tag">The Accident</div>
+        <div class="tl-h">Containment Failure</div>
+        <div class="tl-steps">
+          <div class="tl-step"><b>1</b> During a critical test, core levels spike beyond safe limits.</div>
+          <div class="tl-step"><b>2</b> The emergency shutdown fails — the Helios Core is about to explode.</div>
+          <div class="tl-step"><b>3</b> Instead of escaping, Aarav enters the chamber to trigger a manual release.</div>
+          <div class="tl-step"><b>4</b> The core detonates — its central chamber merges with his body.</div>
+        </div>
+        <p class="tl-p" style="margin-top:14px;">He should have died. Instead, his cells began absorbing and adapting to the energy — his body became the containment system.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">04</div>
+        <div class="tl-tag">The Awakening</div>
+        <div class="tl-h">Three Days Later</div>
+        <p class="tl-p">Aarav remained unconscious for three days. On the third night, the hospital lights failed and the monitors stopped — then a golden-white light began glowing from his chest. He raised his hand. Light poured from his fingertips. He could suddenly perceive far beyond the visible spectrum: infrared, ultraviolet, heat signatures, electromagnetic signals, hidden objects invisible to the human eye. Aarav Menon was no longer an ordinary human. He had become Lumen — the Living Light.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POWERS -->
+<section id="powers">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-eyebrow">Abilities</div>
+      <h2>Powers of the <span class="accent">Living Light</span></h2>
+    </div>
+    <div class="powers-grid">
+      <div class="power-card"><div class="power-icon">☀</div><div class="power-name">Luminous Core</div><div class="power-desc">Generates and stores enormous light energy within his body.</div></div>
+      <div class="power-card"><div class="power-icon">★</div><div class="power-name">Solar Burst</div><div class="power-desc">Concentrates photonic energy into a powerful blast.</div></div>
+      <div class="power-card"><div class="power-icon">⛨</div><div class="power-name">Photon Shield</div><div class="power-desc">Dense layers of light form a protective barrier.</div></div>
+      <div class="power-card"><div class="power-icon">◉</div><div class="power-name">Truth Sight</div><div class="power-desc">Sees across the electromagnetic spectrum.</div></div>
+      <div class="power-card"><div class="power-icon">↯</div><div class="power-name">Light Dash</div><div class="power-desc">Converts to concentrated light for short bursts of speed.</div></div>
+      <div class="power-card"><div class="power-icon">◐</div><div class="power-name">Black Light</div><div class="power-desc">Reveals hidden marks, traces, and energy signatures.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ULTIMATE -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-eyebrow">Ultimate Ability</div>
+      <h2>Prism <span class="accent">Shift</span></h2>
+    </div>
+    <div class="ultimate">
+      <svg class="prism" viewBox="0 0 300 300">
+        <defs>
+          <radialGradient id="pg" cx="50%" cy="50%" r="60%">
+            <stop offset="0%" stop-color="#fff2d4"/>
+            <stop offset="60%" stop-color="#3d7bff" stop-opacity=".5"/>
+            <stop offset="100%" stop-color="#0a0f1f" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <circle cx="150" cy="150" r="90" fill="url(#pg)">
+          <animate attributeName="r" values="80;100;80" dur="4s" repeatCount="indefinite"/>
+        </circle>
+        <g stroke="#5b9bff" stroke-width="1" fill="none" opacity=".5">
+          <polygon points="150,60 220,150 150,240 80,150">
+            <animateTransform attributeName="transform" type="rotate" from="0 150 150" to="360 150 150" dur="14s" repeatCount="indefinite"/>
+          </polygon>
+          <polygon points="150,90 200,150 150,210 100,150">
+            <animateTransform attributeName="transform" type="rotate" from="360 150 150" to="0 150 150" dur="10s" repeatCount="indefinite"/>
+          </polygon>
+        </g>
+      </svg>
+      <div>
+        <p class="tl-p">For a brief window, Lumen transforms his entire body into pure photonic energy.</p>
+        <ul class="ultimate-list">
+          <li>Pass through certain solid objects</li>
+          <li>Move as a beam of light</li>
+          <li>Travel through reflective surfaces</li>
+          <li>Create temporary holographic duplicates</li>
+          <li>Perform short-range light jumps</li>
+        </ul>
+        <div class="cost-note">But Prism Shift comes with a dangerous cost — the more energy he uses, the hotter the Helios Core becomes.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WEAKNESS -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-eyebrow">The Cost of Power</div>
+      <h2>A Core That Can't <span class="accent">Cool Forever</span></h2>
+    </div>
+    <div class="weakness">
+      <p class="tl-p">The Helios Core is not unlimited. Every use of his strongest abilities raises its temperature. If he pushes beyond the limit, Lumen could lose his life. Every time he chooses to save someone, he risks destroying himself.</p>
+      <div class="heat-bar"><div class="heat-fill"></div></div>
+      <div class="weak-list">
+        <span>Vision distorts</span>
+        <span>Powers become unstable</span>
+        <span>Body suffers energy burns</span>
+        <span>Core may shut down</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HQ -->
+<section id="hq">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-eyebrow">Headquarters</div>
+      <h2>Astra<span class="accent">-7</span></h2>
+      <p class="lead">A repurposed Helios facility hidden deep beneath the Western Ghats.</p>
+    </div>
+    <div class="hq-grid">
+      <ul class="hq-list">
+        <li>Advanced AI command system</li>
+        <li>Photonic research laboratory</li>
+        <li>Lumen's suit chamber</li>
+        <li>Helios Core monitoring systems</li>
+        <li>Global emergency communication network</li>
+        <li>Distress-signal detection system</li>
+      </ul>
+      <div class="map-panel">
+        <div class="radar">
+          <div class="radar-ring" style="width:60px;height:60px;"></div>
+          <div class="radar-ring" style="width:120px;height:120px;"></div>
+          <div class="radar-ring" style="width:180px;height:180px;"></div>
+          <div class="radar-sweep"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MISSION -->
+<section class="philosophy" id="mission">
+  <div class="wrap">
+    <div class="section-eyebrow" style="text-align:center;">Philosophy</div>
+    <p class="big-quote">"No one should be left in the dark."</p>
+
+    <div class="mission-body">
+      Lumen's mission is to use his extraordinary photonic powers to <b>protect people, respond to emergencies, and help those who have nowhere else to turn.</b> He monitors distress signals from his headquarters, Astra-7, and acts whenever someone needs help.
+      <br><br>
+      His philosophy is:
+    </div>
+
+    <div class="mission-quote">"Power isn't about being the strongest. It's about being there when someone needs you."</div>
+    <div class="attribution">— AARAV MENON</div>
+  </div>
+</section>
+
+<!-- MYSTERY -->
+<section id="mystery">
+  <div class="wrap">
+    <div class="mystery">
+      <div class="section-eyebrow" style="text-align:center;">Unresolved</div>
+      <h2>The Accident Wasn't <span class="flicker">an Accident.</span></h2>
+      <p>Someone deliberately sabotaged Project HELIOS and wanted the HELIOS Core to merge with a human host. In other words, someone wanted to create LUMEN.</p>
+      <p>So Lumen has two missions:</p>
+      <ul class="mission-list">
+        <li><span class="num">1</span><span><b>Protect humanity</b> — save people and make sure no one is left in the dark.</span></li>
+        <li><span class="num">2</span><span><b>Discover the truth</b> — find who created him and why.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">LUMEN — THE LIVING LIGHT · ASTRA-7 SIGNAL NETWORK · IF YOU NEED HELP, LUMEN IS LISTENING</div>
+</footer>
+
+<!-- CHAT ORB -->
+<button id="orb" onclick="openChat()"><span id="orbBadge">1</span></button>
+
+<!-- CHAT PANEL -->
+<div id="chatPanel">
+  <div class="chat-head">
+    <div class="chat-avatar"></div>
+    <div>
+      <div class="chat-title">Lumen</div>
+      <div class="chat-status"><span class="dot"></span>Listening from Astra-7</div>
+    </div>
+    <button class="chat-close" onclick="closeChat()">✕</button>
+  </div>
+  <div id="chatBody"></div>
+  <div id="chatOptions"></div>
+  <div class="chat-input-row">
+    <input id="chatInput" type="text" placeholder="Type your message..." autocomplete="off">
+    <button id="chatSend">↑</button>
+  </div>
+</div>
+
+<script>
+/* BACKGROUND LIGHT FIELD */
+const canvas=document.getElementById('field'),ctx=canvas.getContext('2d');
+let W,H,motes=[];
+function resize(){W=canvas.width=innerWidth;H=canvas.height=innerHeight;}
+resize();
+addEventListener('resize',resize);
+const MOTE_COUNT=Math.min(90,Math.floor(innerWidth/16));
+for(let i=0;i<MOTE_COUNT;i++){
+  motes.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.6+.4,vy:-(Math.random()*.25+.05),vx:(Math.random()-.5)*.15,hue:Math.random()>.75?'gold':'blue',a:Math.random()*.6+.2,tw:Math.random()*.02+.005});
+}
+function drawField(){
+  ctx.clearRect(0,0,W,H);
+  ctx.globalCompositeOperation='lighter';
+  for(const m of motes){
+    m.y+=m.vy;m.x+=m.vx;m.a+=m.tw;
+    if(m.y<-10)m.y=H+10;
+    if(m.x<-10)m.x=W+10;
+    if(m.x>W+10)m.x=-10;
+    const alpha=(Math.sin(m.a)*.5+.5)*.7+.1;
+    const color=m.hue==='gold'?`rgba(255,217,160,${alpha})`:`rgba(93,150,255,${alpha*.7})`;
+    ctx.beginPath();ctx.fillStyle=color;ctx.arc(m.x,m.y,m.r*2.4,0,Math.PI*2);ctx.fill();
+  }
+  ctx.globalCompositeOperation='source-over';
+  requestAnimationFrame(drawField);
+}
+drawField();
+
+/* CHATBOT */
+const FORM_SUBMIT_ENDPOINT="https://formsubmit.co/abhijithku10@gmail.com";
+const FORM_SUBMIT_AJAX_ENDPOINT="https://formsubmit.co/ajax/abhijithku10@gmail.com";
+const FORM_SUBMIT_ACTIVATION_KEY="lumen-formsubmit-activation-attempted";
+const chatBody=document.getElementById('chatBody'),chatPanel=document.getElementById('chatPanel'),chatOptions=document.getElementById('chatOptions'),chatInput=document.getElementById('chatInput'),chatSend=document.getElementById('chatSend');
+let convo={name:null,age:null,location:null,email:null,grievance:null};
+let step='greet',started=false;
+
+function addMsg(text,cls='bot'){const div=document.createElement('div');div.className='msg '+cls;div.textContent=text;chatBody.appendChild(div);chatBody.scrollTop=chatBody.scrollHeight;}
+function addSystem(text){const div=document.createElement('div');div.className='msg system';div.textContent=text;chatBody.appendChild(div);chatBody.scrollTop=chatBody.scrollHeight;}
+function showTyping(cb,ms=650){const t=document.createElement('div');t.className='typing';t.innerHTML='<span></span><span></span><span></span>';chatBody.appendChild(t);chatBody.scrollTop=chatBody.scrollHeight;setTimeout(()=>{t.remove();cb();},ms);}
+function botSay(text,delay=650){showTyping(()=>{addMsg(text,'bot');},delay);}
+function setOptions(opts){chatOptions.innerHTML='';opts.forEach(o=>{const b=document.createElement('button');b.className='opt-btn';b.textContent=o.label;b.onclick=()=>{handleUserInput(o.value??o.label);};chatOptions.appendChild(b);});}
+function clearOptions(){chatOptions.innerHTML='';}
+
+function openChat(){
+  chatPanel.classList.add('open');
+  document.getElementById('orbBadge').style.display='none';
+  if(!started){started=true;runFlow();}
+}
+function closeChat(){chatPanel.classList.remove('open');}
+
+function runFlow(){
+  botSay("Hey. I'm Lumen. I help people who need someone to listen.",500);
+  setTimeout(()=>{botSay("What's your name?",300);step='name';},1300);
+}
+
+function handleUserInput(raw){
+  const text=(raw||'').trim();
+  if(!text)return;
+  addMsg(text,'user');
+  chatInput.value='';
+  clearOptions();
+
+  if(step==='name'){
+    convo.name=text;
+    botSay(`It's good to meet you, ${firstName(text)}. Can you tell me your age?`);
+    step='age';
+  }else if(step==='age'){
+    convo.age=text;
+    botSay("Thank you. Where are you reaching out from — city or region?");
+    step='location';
+  }else if(step==='location'){
+    convo.location=text;
+    botSay("And an email address, in case I need to follow up with you?");
+    step='email';
+  }else if(step==='email'){
+    convo.email=text;
+    setTimeout(()=>{botSay("So... tell me. How can I help you?",500);step='grievance';},300);
+  }else if(step==='grievance'){
+    convo.grievance=text;
+    botSay("I hear you. Give me a moment — I'm sending this to my console at Astra-7.",500);
+    step='confirm';
+    setTimeout(sendSignal,1500);
+  }else if(step==='done'){
+    botSay("I've already logged your request — Astra-7 has it. I'll reach out if I need anything else. You're not carrying this alone.");
+  }
+}
+
+function firstName(full){return full.split(' ')[0];}
+
+function sendSignal(){
+  addSystem('⚡ SIGNAL TRANSMITTED TO ASTRA-7 ⚡');
+  const now=new Date();
+  const formData=new FormData();
+  formData.append('_subject','Someone Needs Your Help!');
+  formData.append('_template','table');
+  formData.append('_captcha','false');
+  formData.append('_replyto',convo.email);
+  formData.append('Name',convo.name);
+  formData.append('Age',convo.age);
+  formData.append('Location',convo.location);
+  formData.append('Email',convo.email);
+  formData.append('Submitted',now.toLocaleString());
+  formData.append('Grievance / Request',convo.grievance);
+  const activationAttempted=localStorage.getItem(FORM_SUBMIT_ACTIVATION_KEY)==='true';
+
+  showTyping(()=>{
+    addMsg(`Got it, ${firstName(convo.name)}. Your signal has reached Astra-7's distress network. I'm on it.`,'bot');
+    setTimeout(()=>{
+      addSystem('Preparing notification email...');
+      setTimeout(()=>{
+        if(!activationAttempted){
+          localStorage.setItem(FORM_SUBMIT_ACTIVATION_KEY,'true');
+          const approvalForm=document.createElement('form');
+          approvalForm.method='POST';
+          approvalForm.action=FORM_SUBMIT_ENDPOINT;
+          approvalForm.style.display='none';
+          for(const [name,value] of formData.entries()){
+            const input=document.createElement('input');
+            input.type='hidden';
+            input.name=name;
+            input.value=value;
+            approvalForm.appendChild(input);
+          }
+          document.body.appendChild(approvalForm);
+          approvalForm.submit();
+          return;
+        }
+
+        fetch(FORM_SUBMIT_AJAX_ENDPOINT,{method:'POST',body:formData,headers:{Accept:'application/json'}})
+          .then(response=>{
+            if(!response.ok)throw new Error('FormSubmit request failed');
+            return response.json();
+          })
+          .then(result=>{
+            if(!result.success)throw new Error(result.message||'FormSubmit rejected the request');
+            addSystem('Notification email sent successfully.');
+          })
+          .catch(error=>{
+            const message=location.protocol==='file:'
+              ? 'Please open this page through a web server before sending.'
+              : 'The notification could not be sent. Please try again.';
+            console.error('FormSubmit error:',error);
+            addSystem(message);
+          })
+          .finally(()=>{step='done';});
+      },700);
+    },900);
+  },900);
+}
+
+chatSend.addEventListener('click',()=>{handleUserInput(chatInput.value);});
+chatInput.addEventListener('keydown',e=>{if(e.key==='Enter'){handleUserInput(chatInput.value);}});
+
+/* STORY MODE */
+(function(){
+  const storyBtn=document.getElementById('storyModeBtn'),originSection=document.getElementById('origin'),storyBadge=document.getElementById('storyBadge');
+  const items=Array.from(document.querySelectorAll('.tl-item'));
+
+  function enterStoryMode(){
+    originSection.classList.add('story-mode');
+    storyBadge.classList.add('show');
+    setTimeout(()=>{originSection.scrollIntoView({behavior:'smooth',block:'start'});},60);
+  }
+
+  if(storyBtn){storyBtn.addEventListener('click',e=>{e.preventDefault();enterStoryMode();});}
+
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        items.forEach(it=>it.classList.remove('active'));
+        entry.target.classList.add('active');
+      }
+    });
+  },{threshold:.5,rootMargin:'-20% 0px -20% 0px'});
+
+  items.forEach(it=>io.observe(it));
+})();
+
+/* INTRO SEQUENCE */
+(function(){
+  const overlay=document.getElementById('introOverlay'),canvas=document.getElementById('introCanvas'),ictx=canvas.getContext('2d');
+  const seed=document.getElementById('introSeed'),line=document.getElementById('introLine'),ring=document.getElementById('introRing');
+  const worldEl=document.getElementById('introWorld'),lumenEl=document.getElementById('introLumen'),livingEl=document.getElementById('introLiving');
+  const dividerEl=document.getElementById('introDivider'),quoteEl=document.getElementById('introQuote'),content=document.getElementById('introContent'),skipBtn=document.getElementById('introSkip');
+
+  document.documentElement.classList.add('intro-lock');
+
+  let iw,ih,introMotes=[];
+  function resizeIntro(){iw=canvas.width=innerWidth;ih=canvas.height=innerHeight;}
+  resizeIntro();
+  addEventListener('resize',resizeIntro);
+
+  const INTRO_MOTE_COUNT=Math.min(70,Math.floor(innerWidth/16));
+  for(let i=0;i<INTRO_MOTE_COUNT;i++){
+    introMotes.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.1+.3,vy:-(Math.random()*.12+.03),a:Math.random()*.6+.15,tw:Math.random()*.012+.003,gold:Math.random()>.6});
+  }
+
+  let introDone=false,tickHandle;
+  function drawIntro(){
+    ictx.clearRect(0,0,iw,ih);
+    ictx.globalCompositeOperation='lighter';
+    introMotes.forEach(m=>{
+      m.y+=m.vy;m.a+=m.tw;
+      if(m.y<-10)m.y=ih+10;
+      const alpha=(Math.sin(m.a)*.5+.5)*.55+.08;
+      ictx.beginPath();
+      ictx.fillStyle=m.gold?`rgba(255,224,170,${alpha})`:`rgba(160,190,255,${alpha*.6})`;
+      ictx.arc(m.x,m.y,m.r*2,0,Math.PI*2);
+      ictx.fill();
+    });
+    ictx.globalCompositeOperation='source-over';
+    if(!introDone){tickHandle=requestAnimationFrame(drawIntro);}
+  }
+  drawIntro();
+
+  function converge(cb){
+    seed.classList.add('bloom');
+    setTimeout(()=>{ring.classList.add('expand');},250);
+    setTimeout(()=>{line.classList.add('draw');},500);
+    setTimeout(()=>{line.classList.add('retract');},1900);
+    setTimeout(cb,2150);
+  }
+
+  let timers=[];
+  function schedule(fn,ms){timers.push(setTimeout(fn,ms));}
+  function clearAllTimers(){timers.forEach(t=>clearTimeout(t));timers=[];}
+
+  function finishIntro(){
+    clearAllTimers();
+    introDone=true;
+    cancelAnimationFrame(tickHandle);
+    overlay.classList.add('fade-out');
+    document.documentElement.classList.remove('intro-lock');
+    setTimeout(()=>{overlay.remove();},900);
+  }
+
+  function playSequence(){
+    schedule(()=>{worldEl.classList.add('show');},400);
+    schedule(()=>{converge(()=>{lumenEl.classList.add('show');});},1500);
+    schedule(()=>{lumenEl.classList.add('shimmer');},3300);
+    schedule(()=>{livingEl.classList.add('show');},3900);
+    schedule(()=>{dividerEl.classList.add('show');},4500);
+    schedule(()=>{content.classList.add('dissolve');},6100);
+    schedule(()=>{quoteEl.classList.add('show');},6800);
+    schedule(()=>{finishIntro();},9000);
+  }
+
+  skipBtn.addEventListener('click',finishIntro);
+  schedule(()=>{skipBtn.classList.add('show');},500);
+  playSequence();
+})();
+</script>
+
+</body>
+</html>
