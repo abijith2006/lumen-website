@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LUMEN — The Living Light</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Rajdhani:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- UNIQUE BOX-FREE COSMIC BOOT SYSTEM -->
+  <div class="boot-screen" id="bootScreen">
+    <div class="boot-space-field"></div>
+    <div class="boot-horizon-glow"></div>
+
+    <!-- Central Singularity & Orbiting Rings -->
+    <div class="boot-core-system">
+      <div class="boot-crosshair-h"></div>
+      <div class="boot-crosshair-v"></div>
+      <div class="boot-ring boot-ring-1"></div>
+      <div class="boot-ring boot-ring-2"></div>
+      <div class="boot-ring boot-ring-3"></div>
+      <div class="boot-singularity"></div>
+    </div>
+
+    <!-- Floating Clean Readout Cluster -->
+    <div class="boot-meta-cluster">
+      <p class="boot-eyebrow">ASTRA-7 // NEURAL SIGNAL SYSTEM</p>
+      <h1 class="boot-hero-title">HELIOS<span>CORE</span></h1>
+      
+      <div class="boot-telemetry-badge">
+        <span class="boot-badge-dot"></span>
+        <span id="bootStatusText">ALIGNING QUANTUM FREQUENCIES...</span>
+      </div>
+
+      <div class="boot-stream-track">
+        <div class="boot-stream-fill" id="progressBar">
+          <span class="boot-stream-head"></span>
+        </div>
+      </div>
+
+      <div class="boot-readout">
+        <span>PHOTON HARMONIC</span>
+        <strong id="progressText">0% ONLINE</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- AMBIENT CANVAS -->
+  <canvas id="field"></canvas>
+
+  <!-- MAIN SITE -->
+  <main class="site" id="site">
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="home">
+      <video autoplay muted loop playsinline preload="auto" aria-label="Abstract glowing light moving through a dark retro-futurist landscape">
+        <source src="./create_a_elegent_animated_vide.mp4" type="video/mp4" />
+        <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/create_a_elegent_animated_vide-hy5vtG8OSXGhKyMvok6VKEfZWRu99R.mp4" type="video/mp4" />
+      </video>
+      <div class="hero-vignette"></div>
+      <div class="hero-sweep"></div>
+      <div class="particles" id="particles"></div>
+
+      <header class="nav">
+        <a class="wordmark" href="#home"><span class="wordmark-dot"></span>LUMEN</a>
+        <nav>
+          <a href="#home">HOME</a>
+          <a href="#origin">ORIGIN</a>
+          <a href="#powers">POWERS</a>
+          <a href="#mission">MISSION</a>
+          <a href="#mystery">MYSTERY</a>
+        </nav>
+        <button class="nav-cta" onclick="openChat()">CONNECT ↗</button>
+      </header>
+
+      <!-- HERO CONTENT -->
+      <div class="hero-content">
+        <div class="hero-status-pill">
+          <span class="status-dot-pulse"></span>
+          SIGNAL GUARDIAN // ONLINE
+        </div>
+
+        <h1 class="hero-title-massive">
+          <span class="title-white-line">FIND YOUR</span>
+          <span class="title-cyan-line">INNER LIGHT.</span>
+        </h1>
+
+        <p class="hero-lead-text">
+          Every city has voices that disappear beneath the noise. <strong>LUMEN</strong> listens for the signals that others miss — and turns uncarried burdens into living light.
+        </p>
+
+        <div class="hero-actions-row">
+          <button class="btn-solid-cyan" onclick="openChat()">SEND YOUR SIGNAL <span>→</span></button>
+          <a href="#origin" class="btn-outline-cyan" id="storyModeBtn">DISCOVER LUMEN <span>⌄</span></a>
+        </div>
+      </div>
+
+      <!-- BOTTOM TELEMETRY BAR -->
+      <div class="hero-telemetry-bottom">
+        <div class="telemetry-chip">
+          <span class="status-dot-pulse"></span>
+          SIGNAL SYSTEM ONLINE
+        </div>
+        <div class="telemetry-chip">
+          RESONANCE LEVEL <strong>98%</strong>
+          <div class="telemetry-bar"><span></span></div>
+        </div>
+        <div class="telemetry-scroll">
+          SCROLL <span>↓</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 01: PROFILE -->
+    <section id="profile">
+      <div class="wrap">
+        <div class="profile-grid">
+          <div>
+            <div class="section-eyebrow">Character File</div>
+            <h2>Who is <span class="accent">Lumen</span></h2>
+            <p class="lead">Calm. Intelligent. Compassionate. A hero who listens before he acts — because most people who reach out have already run out of people who will.</p>
+            <div class="trait-pills">
+              <span class="pill">Calm</span>
+              <span class="pill">Intelligent</span>
+              <span class="pill">Compassionate</span>
+              <span class="pill">Listener</span>
+            </div>
+          </div>
+          <div class="profile-card">
+            <div class="pf-row"><span class="pf-label">Real Name</span><span class="pf-value">Aarav Menon</span></div>
+            <div class="pf-row"><span class="pf-label">Age</span><span class="pf-value">24</span></div>
+            <div class="pf-row"><span class="pf-label">Occupation</span><span class="pf-value">Photonics & Energy Systems Research Engineer</span></div>
+            <div class="pf-row"><span class="pf-label">Headquarters</span><span class="pf-value">Astra-7, beneath the Western Ghats</span></div>
+            <div class="mission-box">"No one should be left in the dark."</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02: ORIGIN TIMELINE -->
+    <section id="origin">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="story-badge" id="storyBadge"><span class="dot"></span>STORY MODE ENGAGED</div>
+          <div class="section-eyebrow">How he became Lumen</div>
+          <h2>Four moments, <span class="accent">one light</span></h2>
+        </div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot">01</div>
+            <div class="tl-tag">Origin</div>
+            <div class="tl-h">The Boy Who Chased Light</div>
+            <p class="tl-p">From childhood, Aarav Menon was fascinated by light. Where others saw only illumination, he saw energy, information, and the future of technology. Raised by an electrical engineer and a physics teacher, he dedicated himself to photonics and energy systems — chasing clean, powerful, controllable energy for humanity. That pursuit led him to a classified research program.</p>
+            <div class="tl-quote">"Light is more than what your eyes can see." — Aarav's father</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">02</div>
+            <div class="tl-tag">Project Helios</div>
+            <div class="tl-h">An Artificial Star</div>
+            <p class="tl-p">At 24, Aarav joined a classified program with an extraordinary objective: build an artificial star-like energy core capable of generating and controlling enormous photonic and electromagnetic energy. There was one unsolved problem: the human body was never designed to survive that amount of energy.</p>
+          </div>
+          <div class="tl-item warn">
+            <div class="tl-dot">03</div>
+            <div class="tl-tag">The Accident</div>
+            <div class="tl-h">Containment Failure</div>
+            <div class="tl-steps">
+              <div class="tl-step"><b>1</b> During a critical test, core levels spike beyond safe limits.</div>
+              <div class="tl-step"><b>2</b> The emergency shutdown fails — the Helios Core is about to explode.</div>
+              <div class="tl-step"><b>3</b> Instead of escaping, Aarav enters the chamber to trigger a manual release.</div>
+              <div class="tl-step"><b>4</b> The core detonates — its central chamber merges with his body.</div>
+            </div>
+            <p class="tl-p" style="margin-top:14px;">He should have died. Instead, his cells began absorbing and adapting to the energy — his body became the containment system.</p>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">04</div>
+            <div class="tl-tag">The Awakening</div>
+            <div class="tl-h">Three Days Later</div>
+            <p class="tl-p">Aarav remained unconscious for three days. On the third night, the hospital lights failed and the monitors stopped — then a golden-white light began glowing from his chest. He raised his hand. Light poured from his fingertips. He could suddenly perceive far beyond the visible spectrum: infrared, ultraviolet, heat signatures, electromagnetic signals, hidden objects invisible to the human eye. Aarav Menon was no longer an ordinary human. He had become Lumen — the Living Light.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03: POWERS -->
+    <section id="powers">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-eyebrow">Abilities</div>
+          <h2>Powers of the <span class="accent">Living Light</span></h2>
+        </div>
+        <div class="powers-grid">
+          <div class="power-card"><div class="power-icon">☀</div><div class="power-name">Luminous Core</div><div class="power-desc">Generates and stores enormous light energy within his body.</div></div>
+          <div class="power-card"><div class="power-icon">★</div><div class="power-name">Solar Burst</div><div class="power-desc">Concentrates photonic energy into a powerful blast.</div></div>
+          <div class="power-card"><div class="power-icon">⛨</div><div class="power-name">Photon Shield</div><div class="power-desc">Dense layers of light form a protective barrier.</div></div>
+          <div class="power-card"><div class="power-icon">◉</div><div class="power-name">Truth Sight</div><div class="power-desc">Sees across the electromagnetic spectrum.</div></div>
+          <div class="power-card"><div class="power-icon">↯</div><div class="power-name">Light Dash</div><div class="power-desc">Converts to concentrated light for short bursts of speed.</div></div>
+          <div class="power-card"><div class="power-icon">◐</div><div class="power-name">Black Light</div><div class="power-desc">Reveals hidden marks, traces, and energy signatures.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04: ULTIMATE -->
+    <section>
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-eyebrow">Ultimate Ability</div>
+          <h2>Prism <span class="accent">Shift</span></h2>
+        </div>
+        <div class="ultimate">
+          <svg class="prism" viewBox="0 0 300 300">
+            <defs>
+              <radialGradient id="pg" cx="50%" cy="50%" r="60%">
+                <stop offset="0%" stop-color="#fff2d4"/>
+                <stop offset="60%" stop-color="#3d7bff" stop-opacity=".5"/>
+                <stop offset="100%" stop-color="#0a0f1f" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <circle cx="150" cy="150" r="90" fill="url(#pg)">
+              <animate attributeName="r" values="80;100;80" dur="4s" repeatCount="indefinite"/>
+            </circle>
+            <g stroke="#5b9bff" stroke-width="1" fill="none" opacity=".5">
+              <polygon points="150,60 220,150 150,240 80,150">
+                <animateTransform attributeName="transform" type="rotate" from="0 150 150" to="360 150 150" dur="14s" repeatCount="indefinite"/>
+              </polygon>
+              <polygon points="150,90 200,150 150,210 100,150">
+                <animateTransform attributeName="transform" type="rotate" from="360 150 150" to="0 150 150" dur="10s" repeatCount="indefinite"/>
+              </polygon>
+            </g>
+          </svg>
+          <div>
+            <p class="tl-p">For a brief window, Lumen transforms his entire body into pure photonic energy.</p>
+            <ul class="ultimate-list">
+              <li>Pass through certain solid objects</li>
+              <li>Move as a beam of light</li>
+              <li>Travel through reflective surfaces</li>
+              <li>Create temporary holographic duplicates</li>
+              <li>Perform short-range light jumps</li>
+            </ul>
+            <div class="cost-note">But Prism Shift comes with a dangerous cost — the more energy he uses, the hotter the Helios Core becomes.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05: WEAKNESS -->
+    <section>
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-eyebrow">The Cost of Power</div>
+          <h2>A Core That Can't <span class="accent">Cool Forever</span></h2>
+        </div>
+        <div class="weakness">
+          <p class="tl-p">The Helios Core is not unlimited. Every use of his strongest abilities raises its temperature. If he pushes beyond the limit, Lumen could lose his life. Every time he chooses to save someone, he risks destroying himself.</p>
+          <div class="heat-bar"><div class="heat-fill"></div></div>
+          <div class="weak-list">
+            <span>Vision distorts</span>
+            <span>Powers become unstable</span>
+            <span>Body suffers energy burns</span>
+            <span>Core may shut down</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06: HEADQUARTERS -->
+    <section id="hq">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="section-eyebrow">Headquarters</div>
+          <h2>Astra<span class="accent">-7</span></h2>
+          <p class="lead">A repurposed Helios facility hidden deep beneath the Western Ghats.</p>
+        </div>
+        <div class="hq-grid">
+          <ul class="hq-list">
+            <li>Advanced AI command system</li>
+            <li>Photonic research laboratory</li>
+            <li>Lumen's suit chamber</li>
+            <li>Helios Core monitoring systems</li>
+            <li>Global emergency communication network</li>
+            <li>Distress-signal detection system</li>
+          </ul>
+          <div class="map-panel">
+            <div class="radar">
+              <div class="radar-ring" style="width:60px;height:60px;"></div>
+              <div class="radar-ring" style="width:120px;height:120px;"></div>
+              <div class="radar-ring" style="width:180px;height:180px;"></div>
+              <div class="radar-sweep"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07: PHILOSOPHY -->
+    <section class="philosophy" id="mission">
+      <div class="wrap">
+        <div class="section-eyebrow" style="text-align:center;">Philosophy</div>
+        <p class="big-quote">"No one should be left in the dark."</p>
+
+        <div class="mission-body">
+          Lumen's mission is to use his extraordinary photonic powers to <b>protect people, respond to emergencies, and help those who have nowhere else to turn.</b> He monitors distress signals from his headquarters, Astra-7, and acts whenever someone needs help.
+          <br><br>
+          His philosophy is:
+        </div>
+
+        <div class="mission-quote">"Power isn't about being the strongest. It's about being there when someone needs you."</div>
+        <div class="attribution">— AARAV MENON</div>
+      </div>
+    </section>
+
+    <!-- 08: MYSTERY -->
+    <section id="mystery">
+      <div class="wrap">
+        <div class="mystery">
+          <div class="section-eyebrow" style="text-align:center;">Unresolved</div>
+          <h2>The Accident Wasn't <span class="flicker">an Accident.</span></h2>
+          <p>Someone deliberately sabotaged Project HELIOS and wanted the HELIOS Core to merge with a human host. In other words, someone wanted to create LUMEN.</p>
+          <p>So Lumen has two missions:</p>
+          <ul class="mission-list">
+            <li><span class="num">1</span><span><b>Protect humanity</b> — save people and make sure no one is left in the dark.</span></li>
+            <li><span class="num">2</span><span><b>Discover the truth</b> — find who created him and why.</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="wrap">LUMEN — THE LIVING LIGHT · ASTRA-7 SIGNAL NETWORK · IF YOU NEED HELP, LUMEN IS LISTENING</div>
+    </footer>
+  </main>
+
+  <!-- CHAT ORB & PANEL -->
+  <button id="orb" onclick="openChat()"><span id="orbBadge">1</span></button>
+
+  <div id="chatPanel">
+    <div class="chat-head">
+      <div class="chat-avatar"></div>
+      <div>
+        <div class="chat-title">Lumen</div>
+        <div class="chat-status"><span class="dot"></span>Listening from Astra-7</div>
+      </div>
+      <button class="chat-close" onclick="closeChat()">✕</button>
+    </div>
+    <div id="chatBody"></div>
+    <div id="chatOptions"></div>
+    <div class="chat-input-row">
+      <input id="chatInput" type="text" placeholder="Type your message..." autocomplete="off">
+      <button id="chatSend">↑</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
